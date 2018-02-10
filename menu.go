@@ -13,7 +13,7 @@ func SelectGuildMenu() {
 
 Start:
 
-	Msg(InfoMsg, "Select some shit you retard:\n")
+	Msg(InfoMsg, "Select a Guild:\n")
 
 	SelectMap := make(map[int]string)
 	SelectID := 0
