@@ -6,7 +6,7 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/Rivalo/discord-cli/DiscordState"
+	"github.com/miraris/discord-cli/DiscordState"
 	"github.com/chzyer/readline"
 )
 

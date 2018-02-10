@@ -4,7 +4,7 @@ package DiscordState
 import (
 	"fmt"
 
-	"github.com/Rivalo/discordgo_cli"
+	"github.com/bwmarrin/discordgo"
 )
 
 //!----- Session -----!//
@@ -23,7 +23,16 @@ func (Session *Session) Start() error {
 
 	fmt.Printf("*Starting Session...")
 
-	dg, err := discordgo.New(Session.Username, Session.Password)
+	var dg *discordgo.Session
+	var err error
+
+	// dg, err := discordgo.New(Session.Username, Session.Password)
+	if Session.Username == "Bot" {
+		dg, err = discordgo.New(Session.Username + " " + Session.Password)
+	} else {
+		dg, err = discordgo.New(Session.Username, Session.Password)
+	}
+
 	if err != nil {
 		return err
 	}
@@ -32,12 +41,7 @@ func (Session *Session) Start() error {
 	dg.Open()
 
 	//Retrieve GuildID's from current User
-	UserGuilds, err := dg.UserGuilds()
-	if err != nil {
-		return err
-	}
-
-	Session.Guilds = UserGuilds
+	Session.Guilds = dg.State.Guilds
 
 	Session.DiscordGo = dg
 
@@ -113,11 +117,6 @@ func (Session *Session) NewState(GuildID string, MessageAmount int) (*State, err
 
 //Update updates the session, this reloads the Guild list
 func (Session *Session) Update() error {
-	UserGuilds, err := Session.DiscordGo.UserGuilds()
-	if err != nil {
-		return err
-	}
-
-	Session.Guilds = UserGuilds
+	Session.Guilds = Session.DiscordGo.State.Guilds
 	return nil
 }

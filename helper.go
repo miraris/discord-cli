@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Rivalo/discordgo_cli"
+	"github.com/bwmarrin/discordgo"
 	"github.com/fatih/color"
 )
 
@@ -84,7 +84,8 @@ func PrintMessages(Amount int) {
 
 			for _, Msg := range Messages {
 				//log.Printf("> %s > %s\n", UserName(m.Author.Username), Msg)
-				MessagePrint(m.Timestamp, m.Author.Username, Msg)
+				ts, _ := m.Timestamp.Parse()
+				MessagePrint(ts, m.Author.Username, Msg)
 
 			}
 		}
@@ -111,10 +112,9 @@ func Notify(m *discordgo.Message) {
 }
 
 //MessagePrint prints one correctly formatted Message to stdout
-func MessagePrint(Time, Username, Content string) {
+func MessagePrint(Time time.Time, Username, Content string) {
 	var Color color.Attribute
-	TimeStamp, _ := time.Parse(time.RFC3339, Time)
-	LocalTime := TimeStamp.Local().Format("2006/01/02 15:04:05")
+	LocalTime := Time.Local().Format("2006/01/02 15:04:05")
 	if val, ok := State.MemberRole[Username]; ok {
 		Color = ColorMatch(val.Color)
 	}
